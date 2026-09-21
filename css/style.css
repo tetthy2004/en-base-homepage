@@ -118,7 +118,7 @@ a{color:inherit;text-decoration:none;}
 .site-footer .container{
   display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px;
 }
-.site-footer .brand img{filter:brightness(0) invert(1); height:28px;}
+.site-footer .brand img{height:28px; background:#fff; padding:4px 10px; border-radius:8px;}
 .footer-copy{color:#9AA3B2; font-size:13px; margin-top:24px; width:100%;}
 
 /* ===== Hero ===== */
