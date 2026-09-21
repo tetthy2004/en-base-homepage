@@ -332,15 +332,3 @@ a{color:inherit;text-decoration:none;}
 
 /* ===== Contact ===== */
 .contact-box{max-width:640px;}
-.contact-form{
-  width:100%;
-  height:1100px;
-  border:none;
-  border-radius:var(--radius-lg);
-  background:#fff;
-  box-shadow:var(--shadow);
-}
-
-@media (max-width: 480px){
-  .contact-form{height:1300px;}
-}
