@@ -7,7 +7,7 @@
 <meta name="description" content="En・Baseは中小企業向けにAI活用のコンサルティング・アプリ開発・ツール導入支援を行っています。一社ごとのお困りごとにフォーカスしたオーダーメイドの支援が強みです。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=Shippori+Mincho:wght@600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" type="image/png" href="images/ロゴ.png">
 </head>
@@ -23,6 +23,7 @@
         <li><a href="#works">実績</a></li>
         <li><a href="#diagnosis">無料診断</a></li>
         <li><a href="#about">会社概要</a></li>
+        <li><a href="#enlab">EN-LAB</a></li>
         <li><a href="#contact">お問い合わせ</a></li>
       </ul>
     </nav>
@@ -35,8 +36,9 @@
   <section id="hero" class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <span class="section-eyebrow">AI活用支援</span>
-        <h1>一社ごとの「困った」に、<br>AIで伴走する。</h1>
+        <span class="hero-eyebrow">AI活用支援</span>
+        <h1>一社ごとの「困った」に、<br><span class="accent-gold">AIで伴走する。</span></h1>
+        <div class="hero-divider"></div>
         <p class="hero-lead">テンプレートではなく、あなたの会社の課題に合わせてAI活用を設計・実行します。まずは無料診断で、今の立ち位置から確認できます。</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="shindan/index.html">無料診断を試す →</a>
@@ -139,12 +141,49 @@
     <div class="container">
       <span class="section-eyebrow">ABOUT</span>
       <h2 class="section-title">会社概要</h2>
-      <dl class="about-grid">
-        <dt>屋号</dt><dd>En・Base</dd>
-        <dt>代表</dt><dd>［ご記入ください］</dd>
-        <dt>所在地</dt><dd>［ご記入ください］</dd>
-        <dt>事業内容</dt><dd>AI活用コンサルティング、AIアプリ開発、ツール導入支援</dd>
-      </dl>
+      <div class="about-layout">
+        <img class="about-photo" src="images/profile-web.jpg" alt="代表 笹ヶ瀬 順也">
+        <div class="about-body">
+          <dl class="about-grid">
+            <dt>屋号</dt><dd>En・Base</dd>
+            <dt>代表</dt><dd>笹ヶ瀬 順也</dd>
+            <dt>所在地</dt><dd>［ご記入ください］</dd>
+            <dt>事業内容</dt><dd>AI活用コンサルティング、AIアプリ開発、ツール導入支援</dd>
+          </dl>
+          <div class="badge-row">
+            <figure class="badge-item">
+              <img src="images/G検定.png" alt="G検定 合格バッジ">
+              <figcaption>G検定</figcaption>
+            </figure>
+            <figure class="badge-item">
+              <img src="images/生成AIパスポート.png" alt="生成AIパスポート 合格バッジ">
+              <figcaption>生成AIパスポート</figcaption>
+            </figure>
+            <figure class="badge-item">
+              <img src="images/SHIHT AI 静岡県地域アンバサダー.png" alt="SHIFT AI 静岡県地域アンバサダー">
+              <figcaption>SHIFT AI<br>静岡県地域アンバサダー</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="enlab" class="section section-soft">
+    <div class="container">
+      <span class="section-eyebrow">COMMUNITY</span>
+      <h2 class="section-title">EN-LAB（地域コミュニティ活動）</h2>
+      <p class="section-lead">遠州エリアの不動産会社が学び合い、つながるコミュニティ「EN-LAB」を、田中正克氏（株式会社ひとむすび）と共同運営しています。営業・人材育成とAI・実務効率化、両方の視点から実践的なノウハウを持ち帰れる場です。</p>
+      <div class="enlab-layout">
+        <img class="enlab-flyer" src="images/en-lab-flyer-web.jpg" alt="EN-LAB 開催案内チラシ">
+        <div class="enlab-body">
+          <ul class="enlab-points">
+            <li>遠州エリアの不動産会社が参加する少人数制コミュニティ</li>
+            <li>業態別の営業・お困りごと相談から、実務効率化の実践レクチャーまで</li>
+            <li>案件・情報交換や成功事例の共有も</li>
+          </ul>
+          <a class="btn btn-primary" href="#contact">参加について問い合わせる →</a>
+        </div>
+      </div>
     </div>
   </section>
   <section id="contact" class="section section-soft">
@@ -166,6 +205,14 @@
 <footer class="site-footer">
   <div class="container">
     <div class="brand"><img src="images/ロゴ.png" alt="En・Base"></div>
+    <div class="footer-social">
+      <a href="https://x.com/junya_ai" target="_blank" rel="noopener" aria-label="X（旧Twitter）">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61566867149138" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12.06C22 6.48 17.52 2 11.94 2S1.88 6.48 1.88 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.42V9.91c0-2.39 1.42-3.71 3.6-3.71 1.04 0 2.13.19 2.13.19v2.34h-1.2c-1.18 0-1.55.73-1.55 1.48v1.78h2.64l-.42 2.91h-2.22V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg>
+      </a>
+    </div>
     <p class="footer-copy">&copy; 2026 En・Base. All rights reserved.</p>
   </div>
 </footer>
