@@ -71,7 +71,7 @@ a{color:inherit;text-decoration:none;}
   cursor:pointer;
 }
 .btn-primary{
-  background:linear-gradient(135deg, var(--color-blue), var(--color-blue-light));
+  background:linear-gradient(135deg, var(--color-blue), #0041C4);
   color:#fff;
 }
 .btn-secondary{
