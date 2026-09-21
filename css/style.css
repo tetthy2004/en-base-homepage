@@ -135,15 +135,17 @@ a{color:inherit;text-decoration:none;}
   display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px;
 }
 .site-footer .brand-text{font-size:20px;}
-.footer-social{display:flex; gap:14px;}
+.footer-social{display:flex; gap:16px;}
 .footer-social a{
   display:flex; align-items:center; justify-content:center;
-  width:36px; height:36px;
+  width:48px; height:48px;
   border-radius:50%;
-  background:rgba(255,255,255,0.12);
-  color:#fff;
+  background:var(--color-gold);
+  color:var(--color-navy);
+  transition:transform .15s ease, background .15s ease;
 }
-.footer-social svg{width:17px; height:17px; fill:currentColor;}
+.footer-social a:hover{background:#fff; transform:translateY(-2px);}
+.footer-social svg{width:22px; height:22px; fill:currentColor;}
 .footer-copy{color:#9AA3B2; font-size:13px; margin-top:24px; width:100%;}
 
 /* ===== Hero ===== */
