@@ -484,8 +484,8 @@
   ];
 
   var PROFILE_QUESTIONS = [
-    {id:'pf1', type:'multi', label:'STEP 1', q:'会社で使っているAIツールを、系統ごとにすべて選んでください。', sub:'この設問は採点対象外です。診断結果の見立てに使います。',
-      options:['チャット型（ChatGPTなど）','横断検索型（NotebookLMなど）','業務組み込み型（Copilot Studioなど）','自律実行型（Coworkなど）','開発・ターミナル型（Claude Codeなど）','使っていない','わからない']},
+    {id:'pf1', type:'multi', label:'STEP 1', q:'会社で使っているAIツールを、すべて選んでください。', sub:'この設問は採点対象外です。診断結果の見立てに使います。',
+      options:['ChatGPT','Claude','Gemini','Copilot','NotebookLM','Claude Code','Codex','その他の業務用AIツール','使っていない','わからない']},
     {id:'pf2', type:'multi', label:'STEP 1', q:'いま社内でAIは、どんな用途に使われていますか？', sub:'あてはまるものをすべて選んでください。',
       options:['翻訳','文章の作成','要約・校正','リサーチ','議事録作成','資料作成','表計算','社内資料の検索','画像・動画生成','業務の自動化','使っていない']},
     {id:'pf3', type:'single', mapsToLevel:true, label:'STEP 1', q:'いま社内でAIは、どこまで使われていますか？もっとも近いものを選んでください。', sub:'この回答は「自己申告フェーズ」として結果画面に表示されます。',
