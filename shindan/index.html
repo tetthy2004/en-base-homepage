@@ -317,6 +317,11 @@
   .cta-card h3{font-size:16.5px;margin:0 0 6px;}
   .cta-card p{font-size:13px;color:var(--text-sub);margin:0 0 6px;}
 
+  .cta-card .share-note{font-size:12px;color:var(--text-faint);margin:12px 0 0;}
+  .share-panel{margin-top:14px;padding:16px;border-radius:14px;background:var(--surface-soft);text-align:left;}
+  .share-panel[hidden]{display:none;}
+  .cta-card .share-msg{font-size:13.5px;color:var(--text);line-height:1.7;margin:0 0 12px;}
+  #share-go{text-decoration:none;}
   .retry-btn{margin-top:8px;}
 
   @media (max-width:480px){
@@ -461,7 +466,12 @@
       <h3>もっと詳しく相談したい方へ</h3>
       <p>診断結果をもとに、優先順位づけと実行計画を一緒に整理する無料相談を行っています。</p>
       <div class="price-row"><span class="price-old">通常 有料</span><span class="price-new">→ 初回無料相談</span></div>
-      <a class="btn btn-primary" href="../index.html#contact">無料相談を予約する →</a>
+      <button class="btn btn-primary" id="btn-consult">診断結果を添えて相談する →</button>
+      <div class="share-panel" id="share-panel" hidden>
+        <p class="share-msg" id="share-msg"></p>
+        <a class="btn btn-primary" id="share-go" href="#" target="_blank" rel="noopener">フォームを開く →</a>
+      </div>
+      <p class="share-note">結果は、あなたが送信ボタンを押すまで外部に送られません。</p>
     </div>
 
     <button class="btn btn-ghost retry-btn" id="btn-retry">もう一度診断する</button>
@@ -472,6 +482,12 @@
 <script>
 (function(){
   "use strict";
+
+  /* ---------------- CONTACT: 相談の受付先（どちらか一方でOK。両方空ならコピーのみ） ---------------- */
+  var CONTACT = {
+    email: '',     // 例: 'info@example.com'（設定するとメールが開く）
+    formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScc4dcegymhxcQrg9-gC2mls3mqsTMLx-LEYNiR8goKTGgZbQ/viewform'    // 例: 'https://forms.gle/xxxx'（設定するとフォームが開く。email より優先）
+  };
 
   /* ---------------- DATA ---------------- */
   var LEVELS = [
@@ -739,6 +755,7 @@
 
     navRow.style.display = 'flex';
     btnPrev.style.visibility = (state.profileIndex===0) ? 'hidden' : 'visible';
+    btnNext.textContent = '次へ →';
     updateNextEnabled();
 
     Array.prototype.forEach.call(qCard.querySelectorAll('.opt'), function(btn){
@@ -781,30 +798,16 @@
       '<p class="q-sub">'+sq.sub+'</p>' +
       '<div class="opt-list">'+optsHtml+'</div>';
 
-    navRow.style.display = 'none';
+    navRow.style.display = 'flex';
+    btnPrev.style.visibility = 'visible';
+    btnNext.textContent = (state.scoredIndex === SCORED_QUESTIONS.length - 1) ? '結果を見る →' : '次へ →';
+    btnNext.disabled = (selected === undefined);
 
     Array.prototype.forEach.call(qCard.querySelectorAll('.opt'), function(btn){
       btn.addEventListener('click', function(){
-        var idx = parseInt(btn.getAttribute('data-idx'), 10);
-        state.scoredAnswers[state.scoredIndex] = idx;
+        state.scoredAnswers[state.scoredIndex] = parseInt(btn.getAttribute('data-idx'), 10);
         renderScoredQuestion();
-        setTimeout(function(){ goNextFromScored(); }, 260);
       });
-    });
-
-    // manual back control for scored section
-    var backWrap = document.createElement('div');
-    backWrap.style.marginTop = '18px';
-    backWrap.innerHTML = '<button type="button" class="btn btn-ghost" id="scored-back" style="width:auto;padding:10px 16px;font-size:13px;">← 前の質問</button>';
-    qCard.appendChild(backWrap);
-    document.getElementById('scored-back').addEventListener('click', function(){
-      if (state.scoredIndex > 0){
-        state.scoredIndex -= 1;
-        renderQuiz();
-      } else {
-        state.profileIndex = PROFILE_QUESTIONS.length - 1;
-        renderQuiz();
-      }
     });
   }
 
@@ -827,17 +830,24 @@
   }
 
   btnNext.addEventListener('click', function(){
-    if (state.profileIndex < PROFILE_QUESTIONS.length - 1){
-      state.profileIndex += 1;
+    if (state.profileIndex < PROFILE_QUESTIONS.length){
+      state.profileIndex += 1; // 最後のプロフィール設問からは採点設問へ進む
       renderQuiz();
     } else {
-      state.profileIndex += 1; // move past profile section into scored
-      renderQuiz();
+      goNextFromScored();
     }
   });
   btnPrev.addEventListener('click', function(){
-    if (state.profileIndex > 0){
-      state.profileIndex -= 1;
+    if (state.profileIndex < PROFILE_QUESTIONS.length){
+      if (state.profileIndex > 0){
+        state.profileIndex -= 1;
+        renderQuiz();
+      }
+    } else if (state.scoredIndex > 0){
+      state.scoredIndex -= 1;
+      renderQuiz();
+    } else {
+      state.profileIndex = PROFILE_QUESTIONS.length - 1;
       renderQuiz();
     }
   });
@@ -962,8 +972,76 @@
 
     renderTemplatePreview(weakestCat); // removable block: see TEMPLATE PREVIEW markers (CSS/HTML/JS)
 
+    var pickedLabels = function(id){
+      var pq = PROFILE_QUESTIONS.filter(function(p){ return p.id === id; })[0];
+      var v = state.profileAnswers[id];
+      if (v === undefined || v === null) return '未回答';
+      var arr = Array.isArray(v) ? v : [v];
+      return arr.length ? arr.map(function(i){ return pq.options[i]; }).join('、') : '未回答';
+    };
+    var catLine = CATEGORIES.map(function(c){
+      return c + ' ' + (catMax[c] ? Math.round((catRaw[c]/catMax[c])*100) : 0) + '%';
+    }).join('／');
+    var head = '【AI活用診断の結果】\n' +
+      '現在地：フェーズ' + lv.num + '「' + lv.name + '」／総合スコア ' + scorePct + '/100\n' +
+      '自己申告：フェーズ' + selfLv.num + '（確度 ' + confidence + '）\n' +
+      'カテゴリ別：' + catLine + '\n' +
+      '一番詰まっているカテゴリ：' + weakestCat + '\n' +
+      'できていない項目：' + weakItems.length + '件';
+    var detail = '\n' + weakItems.map(function(w){ return '・[' + w.category + '] ' + w.text; }).join('\n') +
+      '\n\n利用中のAIツール：' + pickedLabels('pf1') +
+      '\nAIの用途：' + pickedLabels('pf2') +
+      '\nデータの置き場所：' + pickedLabels('pf4');
+    state.summaryShort = head;
+    state.summaryFull = head + detail;
+
     showScreen('result');
   }
+
+  // クリック中に同期でコピーする（新しいタブを開くとフォーカスが外れ、非同期コピーは失敗するため）
+  function copyText(text){
+    if (legacyCopySync(text)) return Promise.resolve();
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return Promise.reject();
+  }
+  function legacyCopySync(text){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+  // 1回目のクリックでコピーと案内表示、2回目のクリック（リンク）で受付先を開く。
+  // 案内を読んでから移動できる／リンクはクリックで直接開くのでポップアップ制限にかからない。
+  document.getElementById('btn-consult').addEventListener('click', function(){
+    copyText(state.summaryFull).then(function(){ return true; }, function(){ return false; }).then(function(ok){
+      var panel = document.getElementById('share-panel');
+      var msg = document.getElementById('share-msg');
+      var go = document.getElementById('share-go');
+      var lead = ok ? '診断結果をコピーしました。' : '自動コピーができませんでした。結果画面のスクリーンショットを添付してお送りください。';
+      var paste = ok ? '次の画面の「詳細・ご相談内容」欄に貼り付けて（Ctrl+V／スマホは長押し→ペースト）送信してください。' : '';
+      go.removeAttribute('target');
+      if (CONTACT.formUrl){
+        go.href = CONTACT.formUrl; go.target = '_blank'; go.textContent = 'お問い合わせフォームを開く →'; go.style.display = '';
+        msg.textContent = lead + paste;
+      } else if (CONTACT.email){
+        var subject = encodeURIComponent('AI活用診断の結果について相談したい');
+        var body = encodeURIComponent(state.summaryFull + '\n\n（ご相談内容をご記入ください）');
+        var useFull = (body.length + subject.length + CONTACT.email.length) < 1800;
+        if (!useFull) body = encodeURIComponent(state.summaryShort + '\n\n（詳細は続けて貼り付けます）\n\n（ご相談内容をご記入ください）');
+        go.href = 'mailto:' + CONTACT.email + '?subject=' + subject + '&body=' + body; go.textContent = 'メールを作成する →'; go.style.display = '';
+        msg.textContent = useFull ? '内容を入れたメールを作成します。確認のうえ送信してください。' :
+          (ok ? lead + 'メール本文の末尾に貼り付けて送信してください。' : lead);
+      } else {
+        go.style.display = 'none';
+        msg.textContent = lead + (ok ? 'ご相談の際にお貼りください。' : '');
+      }
+      panel.hidden = false;
+      panel.scrollIntoView({block:'nearest', behavior:'smooth'});
+    });
+  });
 
   document.getElementById('btn-retry').addEventListener('click', function(){
     state.profileIndex = 0;
